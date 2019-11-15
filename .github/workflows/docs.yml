@@ -1,0 +1,23 @@
+name: Docs
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: "true"
+      - name: ls
+        run: ls
+      - name: Build Tools
+        run: ./build-tools
+      - name: Build Docs
+        run: ./marsh build --markdown="tools/local/bin/markdown"
+      - name: Archive docs
+        run: cd public/ && tar cvzf docs.tar.gz docs/
+      - uses: actions/upload-artifact@master
+        with:
+          name: docs
+          path: public/docs.tar.gz
